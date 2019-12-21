@@ -1,0 +1,36 @@
+node cut.js -d "," -f 1 fileName                      (gives 1st field of every line of file)
+cat fileName | node cut.js -d "," -f 1                (gives 1st field of every line of stdin)
+node cut.js -d "," -f 1 file1.txt file2.txt ...       (gives 1st field of every line of each file)
+node cut.js -f 1 fileName                             (gives 1st field of every line of file)
+cat fileName | node cut.js -f 1                       (gives 1st field of every line of stdin)
+node cut.js -f 1 file1.txt file2.txt ...              (gives 1st field of every line of each file)
+node cut.js -d "," -f 1,2 fileName                    (gives 1st and 2nd field of every line of file)
+cat fileName | node cut.js -d "," -f 1,2              (gives 1st and 2nd field of every line of stdin)
+node cut.js -f 1,2 fileName                           (gives 1st and 2nd field of every line of file)
+cat fileName | node cut.js -f 1,2                     (gives 1st and 2nd field of every line of stdin)
+node cut.js -d "," -f 1-3 fileName                    (gives 1st,2nd and 3rd field of every line of file)
+cat fileName | node cut.js -d "," -f 1-3              (gives 1st,2nd and 3rd field of every line of stdin)
+node cut.js -f 1-3 fileName                           (gives 1st,2nd and 3rd field of every line of file)
+cat fileName | node cut.js -f 1-3                     (gives 1st,2nd and 3rd field of every line of stdin)
+-------------------------------------------------------------------------------------------
+
+cut on base of column(-c)
+
+node cut.js -c 1 fileName                       (gives 1st column of every line of file)
+node cut.js -c 1,2 fileName                     (gives 1st and 2nd column of every line of file)
+node cut.js -c 1-3 fileName                     (gives 1st,2nd and 3rd column of every line of file)
+node cut.js -c 1                                (gives 1st column of every line of stdin)
+node cut.js -c 1,2                              (gives 1st and 2nd column of every line of stdin)
+node cut.js -c 1-3                              (gives 1st,2nd and 3rd column of every line of stdin)
+node cut.js -c 1-3 file1.txt file2.txt ...      (gives 1st,2nd and 3rd column of every line of each file)
+
+-------------------------------------------------------------------------------------------------------------
+cut on base of byte(-b)
+
+node cut.js -b 1 fileName                       (gives 1st byte of every line of file)
+node cut.js -b 1,2 fileName                     (gives 1st and 2nd byte of every line of file)
+node cut.js -b 1-3 fileName                     (gives 1st,2nd and 3rd byte of every line of file)
+node cut.js -b 1                                (gives 1st byte of every line of stdin)
+node cut.js -b 1,2                              (gives 1st and 2nd byte of every line of stdin)
+node cut.js -b 1-3                              (gives 1st,2nd and 3rd byte of every line of stdin)
+node cut.js -b 1-3 file1.txt file2.txt ...      (gives 1st,2nd and 3rd byte of every line of each file)
