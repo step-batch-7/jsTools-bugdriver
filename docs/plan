@@ -1,17 +1,33 @@
+version 0.1
+-------------
 node cut.js -d "," -f 1 fileName                      (gives 1st field of every line of file)
 cat fileName | node cut.js -d "," -f 1                (gives 1st field of every line of stdin)
+
+version 0.2
 node cut.js -d "," -f 1 file1.txt file2.txt ...       (gives 1st field of every line of each file)
+
+version 0.3
 node cut.js -f 1 fileName                             (gives 1st field of every line of file)
 cat fileName | node cut.js -f 1                       (gives 1st field of every line of stdin)
+
+version 0.4
 node cut.js -f 1 file1.txt file2.txt ...              (gives 1st field of every line of each file)
+
+version 0.5
 node cut.js -d "," -f 1,2 fileName                    (gives 1st and 2nd field of every line of file)
 cat fileName | node cut.js -d "," -f 1,2              (gives 1st and 2nd field of every line of stdin)
+
+version 0.6
 node cut.js -f 1,2 fileName                           (gives 1st and 2nd field of every line of file)
 cat fileName | node cut.js -f 1,2                     (gives 1st and 2nd field of every line of stdin)
+
+version 0.7
 node cut.js -d "," -f 1-3 fileName                    (gives 1st,2nd and 3rd field of every line of file)
 cat fileName | node cut.js -d "," -f 1-3              (gives 1st,2nd and 3rd field of every line of stdin)
 node cut.js -f 1-3 fileName                           (gives 1st,2nd and 3rd field of every line of file)
 cat fileName | node cut.js -f 1-3                     (gives 1st,2nd and 3rd field of every line of stdin)
+
+version 2.0
 -------------------------------------------------------------------------------------------
 
 cut on base of column(-c)
@@ -24,6 +40,7 @@ node cut.js -c 1,2                              (gives 1st and 2nd column of eve
 node cut.js -c 1-3                              (gives 1st,2nd and 3rd column of every line of stdin)
 node cut.js -c 1-3 file1.txt file2.txt ...      (gives 1st,2nd and 3rd column of every line of each file)
 
+version 3.0
 -------------------------------------------------------------------------------------------------------------
 cut on base of byte(-b)
 
