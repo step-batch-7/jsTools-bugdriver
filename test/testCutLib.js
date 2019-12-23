@@ -39,3 +39,14 @@ describe("#selectFields", () => {
     );
   });
 });
+
+describe("#generateFields", () => {
+  it("should generateFields by given fileContent and delimiter", () => {
+    const fileContent = "a,b,c\nd,e,f";
+    const expected = [
+      ["a", "b", "c"],
+      ["d", "e", "f"],
+    ];
+    assert.deepStrictEqual(cutLib.generateFields(fileContent, ","), expected);
+  });
+});

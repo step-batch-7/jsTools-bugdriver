@@ -1,5 +1,6 @@
 todo
 version 0.1
+node cut.js -d "," -f 1 fileName                      (gives 1st field of every line of file)
 
 0.initialize package.json add dev dependency nyc,mocha,chai
 1.create src,test directory

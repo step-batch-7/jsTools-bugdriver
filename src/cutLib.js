@@ -1,5 +1,5 @@
-const generateLines = function(selectedFields, delimeter) {
-  const joinFields = selectedFields.map(fields => fields.join(delimeter));
+const generateLines = function(selectedFields, delimiter) {
+  const joinFields = selectedFields.map(fields => fields.join(delimiter));
   return joinFields.join("\n");
 };
 
@@ -14,4 +14,9 @@ const selectFields = function(fieldList, fieldPlaces) {
   );
 };
 
-module.exports = { generateLines, selectFields };
+const generateFields = function(fileContent, delimiter) {
+  const fileLines = fileContent.split("\n");
+  return fileLines.map(line => line.split(delimiter));
+};
+
+module.exports = { generateLines, selectFields, generateFields };
