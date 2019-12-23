@@ -3,4 +3,15 @@ const generateLines = function(selectedFields, delimeter) {
   return joinFields.join("\n");
 };
 
-module.exports = { generateLines };
+const selectFieldsOfLine = function(lineFieldList, fieldPlaces) {
+  const selectedField = fieldPlaces.map(fields => lineFieldList[fields - 1]);
+  return selectedField.filter(field => field);
+};
+
+const selectFields = function(fieldList, fieldPlaces) {
+  return fieldList.map(lineFieldList =>
+    selectFieldsOfLine(lineFieldList, fieldPlaces)
+  );
+};
+
+module.exports = { generateLines, selectFields };
