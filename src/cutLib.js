@@ -24,4 +24,14 @@ const extractFields = function(data, cmdArgs) {
   const selectedLines = selectFields(fileLineFields, cmdArgs.fields);
   return generateLines(selectedLines, cmdArgs.delimiter);
 };
-module.exports = { generateLines, selectFields, generateFields, extractFields };
+
+const cutFiles = function() {};
+const cutStdin = function() {};
+module.exports = {
+  generateLines,
+  selectFields,
+  generateFields,
+  extractFields,
+  cutFiles,
+  cutStdin,
+};
