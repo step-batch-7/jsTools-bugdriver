@@ -50,3 +50,11 @@ describe("#generateFields", () => {
     assert.deepStrictEqual(cutLib.generateFields(fileContent, ","), expected);
   });
 });
+
+describe("#extractFields", () => {
+  it("should extract given fieldplaces in cmdArgs from given lines", () => {
+    const data = "1,2,3\na,b,c";
+    const cmdArgs = { fields: [1, 2], delimiter: "," };
+    assert.deepStrictEqual(cutLib.extractFields(data, cmdArgs), "1,2\na,b");
+  });
+});

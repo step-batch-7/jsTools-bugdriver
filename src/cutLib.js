@@ -19,4 +19,9 @@ const generateFields = function(fileContent, delimiter) {
   return fileLines.map(line => line.split(delimiter));
 };
 
-module.exports = { generateLines, selectFields, generateFields };
+const extractFields = function(data, cmdArgs) {
+  const fileLineFields = generateFields(data, cmdArgs.delimiter);
+  const selectedLines = selectFields(fileLineFields, cmdArgs.fields);
+  return generateLines(selectedLines, cmdArgs.delimiter);
+};
+module.exports = { generateLines, selectFields, generateFields, extractFields };
