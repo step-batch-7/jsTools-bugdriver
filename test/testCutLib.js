@@ -1,4 +1,6 @@
 const assert = require("chai").assert;
+const EventEmitter = require("events").EventEmitter;
+
 const cutLib = require("../src/cutLib");
 
 describe("#generateLines", () => {
@@ -64,13 +66,10 @@ describe("#extractFields", () => {
   });
 });
 
-describe("#cutFile", () => {
+describe("#performCut", () => {
   it("should select given fields from given file", () => {
-    const cmdArgs = {
-      fields: [1],
-      delimiter: ",",
-      filePaths: ["./filepath"],
-    };
+    const cmdArgs = ["-d", ",", "-f", "1", "./filepath"];
+
     const outputWriter = function(contentToWrite) {
       assert.deepStrictEqual(contentToWrite, { cutLog: "1\n2\n3" });
     };
@@ -85,14 +84,12 @@ describe("#cutFile", () => {
         return true;
       },
     };
-    cutLib.cutFiles(cmdArgs, outputWriter, fileHandlingFunc);
+    const stdinStream = new EventEmitter();
+    cutLib.performCut(cmdArgs, outputWriter, stdinStream, fileHandlingFunc);
   });
   it("should give error if given file is not present", () => {
-    const cmdArgs = {
-      fields: [1],
-      delimiter: ",",
-      filePaths: ["./filepath"],
-    };
+    const cmdArgs = ["-d", ",", "-f", "1", "./filepath"];
+
     const outputWriter = function(contentToWrite) {
       assert.deepStrictEqual(contentToWrite, {
         cutError: `cut: ./filepath: No such file or directory`,
@@ -109,6 +106,41 @@ describe("#cutFile", () => {
         return false;
       },
     };
-    cutLib.cutFiles(cmdArgs, outputWriter, fileHandlingFunc);
+    const stdinStream = new EventEmitter();
+    cutLib.performCut(cmdArgs, outputWriter, stdinStream, fileHandlingFunc);
+  });
+  it("should select given fields from stdin", () => {
+    const cmdArgs = ["-d", ",", "-f", "1"];
+
+    const outputWriter = function(contentToWrite) {
+      assert.deepStrictEqual(contentToWrite, { cutLog: "a\nc\ne" });
+    };
+    const stdinStream = new EventEmitter();
+    cutLib.performCut(cmdArgs, outputWriter, stdinStream);
+    stdinStream.emit("data", "a,b\n");
+    stdinStream.emit("data", "c,d\n");
+    stdinStream.emit("data", "e,f");
+    stdinStream.emit("end");
+  });
+  it("should give error if option is not correct", () => {
+    const cmdArgs = ["-d", ",", "-x", "1", "./filepath"];
+    const outputWriter = function(contentToWrite) {
+      assert.deepStrictEqual(contentToWrite, {
+        cutError: `cut: illegal option`,
+      });
+    };
+    const fileHandlingFunc = {
+      reader: function(filePath, encoding, callback) {
+        assert.strictEqual(filePath, "./filepath");
+        assert.strictEqual(encoding, "utf8");
+        callback(null, "1,line1\n2,line2\n3,line3");
+      },
+      isFileExists: function(filePath) {
+        assert.strictEqual(filePath, "./filepath");
+        return false;
+      },
+    };
+    const stdinStream = new EventEmitter();
+    cutLib.performCut(cmdArgs, outputWriter, stdinStream, fileHandlingFunc);
   });
 });

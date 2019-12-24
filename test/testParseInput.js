@@ -8,8 +8,7 @@ describe("#parseInput", () => {
     const expected = {
       fields: [1],
       delimiter: ",",
-      filePaths: ["fileName"],
-      dataExtractor: cutFiles,
+      filePaths: "fileName",
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -18,8 +17,7 @@ describe("#parseInput", () => {
     const expected = {
       fields: [1],
       delimiter: ",",
-      filePaths: [],
-      dataExtractor: cutStdin,
+      filePaths: undefined,
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -28,8 +26,7 @@ describe("#parseInput", () => {
     const expected = {
       fields: [1],
       delimiter: "\t",
-      filePaths: ["fileName"],
-      dataExtractor: cutFiles,
+      filePaths: "fileName",
     };
     assert.deepStrictEqual(actual, expected);
   });

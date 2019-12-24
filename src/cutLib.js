@@ -1,3 +1,4 @@
+const { parseInput } = require("./parseInput");
 const generateLines = function(selectedFields, delimiter) {
   const joinFields = selectedFields.map(fields => fields.join(delimiter));
   return joinFields.join("\n");
@@ -22,32 +23,54 @@ const generateFields = function(fileContent, delimiter) {
   return fileLines.map(line => line.split(delimiter));
 };
 
-const extractFields = function(data, cmdArgs) {
-  const fileLineFields = generateFields(data, cmdArgs.delimiter);
-  const selectedLines = selectFields(fileLineFields, cmdArgs.fields);
-  return generateLines(selectedLines, cmdArgs.delimiter);
+const extractFields = function(data, cutOption) {
+  const fileLineFields = generateFields(data, cutOption.delimiter);
+  const selectedLines = selectFields(fileLineFields, cutOption.fields);
+  return generateLines(selectedLines, cutOption.delimiter);
 };
 
-const cutFiles = function(cmdArgs, outputWriter, fileHandlingFunc) {
-  for (let filePath of cmdArgs.filePaths) {
-    if (fileHandlingFunc.isFileExists(filePath)) {
-      fileHandlingFunc.reader(filePath, "utf8", (error, data) => {
-        const fileContent = data.replace(/\n$/g, "");
-        const extractedFields = extractFields(fileContent, cmdArgs);
-        outputWriter({ cutLog: extractedFields });
-      });
-    } else {
-      outputWriter({ cutError: `cut: ${filePath}: No such file or directory` });
-    }
+const cutFiles = function(cutOption, outputWriter, fileHandlingFunc) {
+  if (fileHandlingFunc.isFileExists(cutOption.filePaths)) {
+    fileHandlingFunc.reader(cutOption.filePaths, "utf8", (error, data) => {
+      const fileContent = data.replace(/\n$/g, "");
+      const extractedFields = extractFields(fileContent, cutOption);
+      outputWriter({ cutLog: extractedFields });
+    });
+  } else {
+    outputWriter({
+      cutError: `cut: ${cutOption.filePaths}: No such file or directory`,
+    });
   }
 };
 
-const cutStdin = function() {};
+const cutStdin = function(cutOption, outputWriter, stdin) {
+  let userInput = "";
+  stdin.on("data", data => {
+    userInput += data;
+  });
+  stdin.on("end", () => {
+    const extractedLines = extractFields(userInput, cutOption);
+    outputWriter({ cutLog: extractedLines });
+  });
+};
+
+const performCut = function(userArgs, outputWriter, stdin, fileHandlingFunc) {
+  try {
+    const cutOption = parseInput(userArgs);
+    if (cutOption.filePaths) {
+      cutFiles(cutOption, outputWriter, fileHandlingFunc);
+    } else {
+      cutStdin(cutOption, outputWriter, stdin);
+    }
+  } catch (err) {
+    outputWriter({ cutError: err.message });
+  }
+};
+
 module.exports = {
   generateLines,
   selectFields,
   generateFields,
   extractFields,
-  cutFiles,
-  cutStdin,
+  performCut,
 };

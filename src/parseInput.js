@@ -14,9 +14,9 @@ const getFieldPlaces = function(cmdArgs) {
 
 const getFileNames = function(cmdArgs) {
   if (cmdArgs.includes("-d")) {
-    return cmdArgs.slice(4);
+    return cmdArgs[4];
   }
-  return cmdArgs.slice(2);
+  return cmdArgs[2];
 };
 
 const parseInput = function(cmdArgs) {
@@ -24,8 +24,6 @@ const parseInput = function(cmdArgs) {
   parsedInput.fields = getFieldPlaces(cmdArgs);
   parsedInput.delimiter = getDelimeter(cmdArgs);
   parsedInput.filePaths = getFileNames(cmdArgs);
-  parsedInput.dataExtractor =
-    parsedInput.filePaths.length < 1 ? cutStdin : cutFiles;
   return parsedInput;
 };
 
