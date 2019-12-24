@@ -58,3 +58,28 @@ describe("#extractFields", () => {
     assert.deepStrictEqual(cutLib.extractFields(data, cmdArgs), "1,2\na,b");
   });
 });
+
+describe("#cutFile", () => {
+  it("should select given fields from given file", () => {
+    const cmdArgs = {
+      fields: [1],
+      delimiter: ",",
+      filePaths: ["./filepath"],
+    };
+    const outputWriter = function(contentToWrite) {
+      assert.deepStrictEqual(contentToWrite, { cutlog: "1\n2\n3" });
+    };
+    const fileHandlingFunc = {
+      reader: function(filePath, encoding, callback) {
+        assert.strictEqual(filePath, "./filepath");
+        assert.strictEqual(encoding, "utf8");
+        callback(null, "1,line1\n2,line2\n3,line3");
+      },
+      isFileExists: function(filePath) {
+        assert.strictEqual(filePath, "./filepath");
+        return true;
+      },
+    };
+    cutLib.cutFiles(cmdArgs, outputWriter, fileHandlingFunc);
+  });
+});

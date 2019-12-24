@@ -25,7 +25,19 @@ const extractFields = function(data, cmdArgs) {
   return generateLines(selectedLines, cmdArgs.delimiter);
 };
 
-const cutFiles = function() {};
+const cutFiles = function(cmdArgs, outputWriter, fileHandlingFunc) {
+  for (let filePath of cmdArgs.filePaths) {
+    if (fileHandlingFunc.isFileExists(filePath)) {
+      fileHandlingFunc.reader(filePath, "utf8", (error, data) => {
+        const extractedFields = extractFields(data, cmdArgs);
+        outputWriter({ cutlog: extractedFields });
+      });
+    } else {
+      outputWriter({ cutError: `cut: ${filePath}: No such file or directory` });
+    }
+  }
+};
+
 const cutStdin = function() {};
 module.exports = {
   generateLines,
