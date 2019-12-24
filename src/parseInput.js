@@ -8,7 +8,7 @@ const getDelimeter = function(cmdArgs) {
 
 const getFieldPlaces = function(cmdArgs) {
   const indexOfField = cmdArgs.lastIndexOf("-f");
-  if (indexOfField == -1) throw new Error("options are not correct");
+  if (indexOfField == -1) throw new Error("cut: illegal option");
   return [+cmdArgs[indexOfField + 1]];
 };
 

@@ -4,6 +4,9 @@ const generateLines = function(selectedFields, delimiter) {
 };
 
 const selectFieldsOfLine = function(lineFieldList, fieldPlaces) {
+  if (lineFieldList.length < 2) {
+    return lineFieldList;
+  }
   const selectedField = fieldPlaces.map(fields => lineFieldList[fields - 1]);
   return selectedField.filter(field => field);
 };
@@ -29,8 +32,9 @@ const cutFiles = function(cmdArgs, outputWriter, fileHandlingFunc) {
   for (let filePath of cmdArgs.filePaths) {
     if (fileHandlingFunc.isFileExists(filePath)) {
       fileHandlingFunc.reader(filePath, "utf8", (error, data) => {
-        const extractedFields = extractFields(data, cmdArgs);
-        outputWriter({ cutlog: extractedFields });
+        const fileContent = data.replace(/\n$/g, "");
+        const extractedFields = extractFields(fileContent, cmdArgs);
+        outputWriter({ cutLog: extractedFields });
       });
     } else {
       outputWriter({ cutError: `cut: ${filePath}: No such file or directory` });

@@ -38,6 +38,11 @@ describe("#selectFields", () => {
       expected
     );
   });
+  it("should select whole line if there is only one field", () => {
+    const fields = [["a", "b", "c", "d", "e", "f"], ["1"]];
+    const expected = [["a", "b", "d"], ["1"]];
+    assert.deepStrictEqual(cutLib.selectFields(fields, [1, 2, 4]), expected);
+  });
 });
 
 describe("#generateFields", () => {
@@ -67,7 +72,7 @@ describe("#cutFile", () => {
       filePaths: ["./filepath"],
     };
     const outputWriter = function(contentToWrite) {
-      assert.deepStrictEqual(contentToWrite, { cutlog: "1\n2\n3" });
+      assert.deepStrictEqual(contentToWrite, { cutLog: "1\n2\n3" });
     };
     const fileHandlingFunc = {
       reader: function(filePath, encoding, callback) {
@@ -78,6 +83,30 @@ describe("#cutFile", () => {
       isFileExists: function(filePath) {
         assert.strictEqual(filePath, "./filepath");
         return true;
+      },
+    };
+    cutLib.cutFiles(cmdArgs, outputWriter, fileHandlingFunc);
+  });
+  it("should give error if given file is not present", () => {
+    const cmdArgs = {
+      fields: [1],
+      delimiter: ",",
+      filePaths: ["./filepath"],
+    };
+    const outputWriter = function(contentToWrite) {
+      assert.deepStrictEqual(contentToWrite, {
+        cutError: `cut: ./filepath: No such file or directory`,
+      });
+    };
+    const fileHandlingFunc = {
+      reader: function(filePath, encoding, callback) {
+        assert.strictEqual(filePath, "./filepath");
+        assert.strictEqual(encoding, "utf8");
+        callback(null, "1,line1\n2,line2\n3,line3");
+      },
+      isFileExists: function(filePath) {
+        assert.strictEqual(filePath, "./filepath");
+        return false;
       },
     };
     cutLib.cutFiles(cmdArgs, outputWriter, fileHandlingFunc);

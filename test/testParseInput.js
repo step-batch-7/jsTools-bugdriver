@@ -36,6 +36,6 @@ describe("#parseInput", () => {
   it("should throw error if incorrect option passed", () => {
     assert.throws(() => {
       parseInput(["-r", "1", "fileName"]);
-    }, /options are not correct/);
+    }, /cut: illegal option/);
   });
 });
