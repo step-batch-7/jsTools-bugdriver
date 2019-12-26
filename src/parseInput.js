@@ -1,6 +1,6 @@
 const { cutFiles, cutStdin } = require("./cutLib");
 
-const getDelimeter = function(cmdArgs) {
+const getDelimiter = function(cmdArgs) {
   const indexOfDelimiter = cmdArgs.lastIndexOf("-d");
   if (indexOfDelimiter == -1) return "\t";
   return cmdArgs[indexOfDelimiter + 1];
@@ -22,7 +22,7 @@ const getFileNames = function(cmdArgs) {
 const parseInput = function(cmdArgs) {
   const parsedInput = {};
   parsedInput.fields = getFieldPlaces(cmdArgs);
-  parsedInput.delimiter = getDelimeter(cmdArgs);
+  parsedInput.delimiter = getDelimiter(cmdArgs);
   parsedInput.filePaths = getFileNames(cmdArgs);
   return parsedInput;
 };
