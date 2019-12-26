@@ -44,11 +44,8 @@ const cutFiles = function(cutOption, outputWriter, fileHandlingFunc) {
 };
 
 const cutStdin = function(cutOption, outputWriter, stdin) {
-  let userInput = "";
   stdin.on("data", data => {
-    userInput += data;
-  });
-  stdin.on("end", () => {
+    let userInput = data.replace(/\n$/g, "");
     const extractedLines = extractFields(userInput, cutOption);
     outputWriter({ cutLog: extractedLines });
   });

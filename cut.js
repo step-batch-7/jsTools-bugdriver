@@ -11,6 +11,7 @@ const main = function() {
     reader: readFile,
     isFileExists: existsSync,
   };
+  process.stdin.setEncoding("utf8");
   performCut(userArgs, outputWriter, process.stdin, fileHandlingFunc);
 };
 main();

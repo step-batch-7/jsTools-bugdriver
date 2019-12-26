@@ -1,5 +1,5 @@
 node cut.js -f 2 ./appTests/testcut
-1,rajat,mathura
+1,subham,mathura
 2,sachin,delhi
 3,rakesh,nanital
 4,rahul,chennai

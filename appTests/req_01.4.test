@@ -1,0 +1,5 @@
+cat ./appTests/testcut | node cut.js -d , -f 2 
+subham
+sachin
+rakesh
+rahul

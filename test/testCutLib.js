@@ -113,14 +113,12 @@ describe("#performCut", () => {
     const cmdArgs = ["-d", ",", "-f", "1"];
 
     const outputWriter = function(contentToWrite) {
-      assert.deepStrictEqual(contentToWrite, { cutLog: "a\nc\ne" });
+      assert.deepStrictEqual(contentToWrite, { cutLog: "a" });
     };
+
     const stdinStream = new EventEmitter();
     cutLib.performCut(cmdArgs, outputWriter, stdinStream);
     stdinStream.emit("data", "a,b\n");
-    stdinStream.emit("data", "c,d\n");
-    stdinStream.emit("data", "e,f");
-    stdinStream.emit("end");
   });
   it("should give error if option is not correct", () => {
     const cmdArgs = ["-d", ",", "-x", "1", "./filepath"];
