@@ -4,8 +4,9 @@ const { performCut } = require("./src/cutLib");
 const main = function() {
   const userArgs = process.argv.slice(2);
   const outputWriter = function(contentToWrite) {
-    contentToWrite.cutLog && console.log(contentToWrite.cutLog);
-    contentToWrite.cutError && console.error(contentToWrite.cutError);
+    contentToWrite.cutLog != undefined && console.log(contentToWrite.cutLog);
+    contentToWrite.cutError != undefined &&
+      console.error(contentToWrite.cutError);
   };
   const fileHandlingFunc = {
     reader: readFile,
