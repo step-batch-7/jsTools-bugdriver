@@ -16,7 +16,7 @@ describe("#readStreamData", () => {
     readFileStream.emit("error", { code: "EACCES" });
   });
 
-  it("should give lines if readStream give error while reading file", () => {
+  it("should give lines when valid fileName passed ", () => {
     const userArgs = ["-f", "1", "-d", ",", "fileName"];
     const callback = function(lines) {
       assert.deepStrictEqual(lines, {
