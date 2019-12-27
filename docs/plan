@@ -1,9 +1,9 @@
 version 0.1
 -------------
 node cut.js -d "," -f 1 fileName                      (gives 1st field of every line of file)
-cat fileName | node cut.js -d "," -f 1                (gives 1st field of every line of stdin)
 
 version 0.2
+cat fileName | node cut.js -d "," -f 1                (gives 1st field of every line of stdin)
 node cut.js -d "," -f 1 file1.txt file2.txt ...       (gives 1st field of every line of each file)
 
 version 0.3

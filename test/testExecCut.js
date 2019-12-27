@@ -7,8 +7,8 @@ describe("#performCut", () => {
     const userArgs = ["-f", "0", "-d", ",", "fileName"];
     const callback = function(error) {
       assert.deepStrictEqual(error, {
-        err: "cut: [-f] list: values may not include zero",
-        cutFields: "",
+        error: "cut: [-f] list: values may not include zero",
+        cutResult: "",
         exitCode: 1,
       });
     };
@@ -29,8 +29,8 @@ describe("#performCut", () => {
     const userArgs = ["-f", "1", "-d", ",", "fileName"];
     const callback = function(cutFields) {
       assert.deepStrictEqual(cutFields, {
-        err: "",
-        cutFields: "1",
+        error: "",
+        cutResult: "1",
         exitCode: 0,
       });
     };
@@ -47,8 +47,8 @@ describe("#performCut", () => {
     const userArgs = ["-f", "1", "-d", ",", "fileName"];
     const callback = function(cutFields) {
       assert.deepStrictEqual(cutFields, {
-        err: "",
-        cutFields: "1-india",
+        error: "",
+        cutResult: "1-india",
         exitCode: 0,
       });
     };
@@ -65,8 +65,8 @@ describe("#performCut", () => {
     const userArgs = ["-f", "1", "-d", ",", "fileName"];
     const callback = function(error) {
       assert.deepStrictEqual(error, {
-        err: "cut: fileName: Permission denied",
-        cutFields: "",
+        error: "cut: fileName: Permission denied",
+        cutResult: "",
         exitCode: 1,
       });
     };

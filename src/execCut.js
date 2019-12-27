@@ -17,12 +17,12 @@ const generateFields = function(fileContent, cutOption) {
 
 const extractFields = function(data, cutOption) {
   if (data.err) {
-    return { err: data.err, cutFields: EMPTY_STRING, exitCode: 1 };
+    return { error: data.err, cutResult: EMPTY_STRING, exitCode: 1 };
   }
   const extractedField = generateFields(data.lines, cutOption);
   return {
-    err: EMPTY_STRING,
-    cutFields: extractedField.join("\n"),
+    error: EMPTY_STRING,
+    cutResult: extractedField.join("\n"),
     exitCode: 0,
   };
 };
@@ -31,8 +31,8 @@ const performCut = function(userArgs, readFileStream, onCompletion) {
   const cutOption = parseInput(userArgs);
   if (cutOption.error) {
     onCompletion({
-      err: cutOption.error,
-      cutFields: EMPTY_STRING,
+      error: cutOption.error,
+      cutResult: EMPTY_STRING,
       exitCode: 1,
     });
     return;

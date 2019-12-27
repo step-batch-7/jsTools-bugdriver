@@ -1,7 +1,6 @@
 todo
 version 0.1
 node cut.js -d "," -f 1 fileName                      (gives 1st field of every line of file)
-cat fileName | node cut.js -d "," -f 1                (gives 1st field of every line of stdin)
 
 0.initialize package.json add dev dependency nyc,mocha,chai
 1.create src,test directory
@@ -12,7 +11,6 @@ cat fileName | node cut.js -d "," -f 1                (gives 1st field of every 
 -----apptests
 
 5.write test for parseInput function and create parseInput function
-6.write test for getStdin function and create getStdin function
 7.write test for parseFile funciton and create parseFile function
 8.write test for generateFile function and create generateFile function
 9.write test for generateField funciton and create generateField function

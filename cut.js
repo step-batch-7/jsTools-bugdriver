@@ -3,11 +3,11 @@ const { createReadStream } = require("fs");
 const { performCut } = require("./src/execCut");
 
 const main = function() {
-  const cutResultWriter = function(contentToWrite) {
-    process.stderr.write(contentToWrite.err);
-    process.stdout.write(contentToWrite.cutFields);
+  const showResult = function(contentToWrite) {
+    process.stderr.write(contentToWrite.error);
+    process.stdout.write(contentToWrite.cutResult);
     process.exit(contentToWrite.exitCode);
   };
-  performCut(process.argv.slice(2), createReadStream, cutResultWriter);
+  performCut(process.argv.slice(2), createReadStream, showResult);
 };
 main();
