@@ -1,5 +1,4 @@
 "use strict";
-
 const createFileReadStream = function(readFileStream, filePath) {
   return readFileStream(filePath);
 };

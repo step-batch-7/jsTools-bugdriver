@@ -1,0 +1,2 @@
+node cut -f 3 -d dd ./appTests/testcut
+cut: bad delimiter

@@ -1,5 +1,4 @@
 "use strict";
-
 const { createReadStream } = require("fs");
 const { performCut } = require("./src/execCut");
 

@@ -1,0 +1,2 @@
+node cut -f 0 ./appTests/testcut
+cut: [-f] list: values may not include zero
