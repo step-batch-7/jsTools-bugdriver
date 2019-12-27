@@ -1,18 +1,26 @@
-const { cutFiles, cutStdin } = require("./cutLib");
+"use strict";
 
 const getDelimiter = function(cmdArgs) {
+  let delimiter = "\t";
   const indexOfDelimiter = cmdArgs.lastIndexOf("-d");
-  if (indexOfDelimiter == -1) return "\t";
-  return cmdArgs[indexOfDelimiter + 1];
+  if (indexOfDelimiter != -1) delimiter = cmdArgs[indexOfDelimiter + 1];
+  return delimiter;
 };
 
-const getFieldPlaces = function(cmdArgs) {
-  const indexOfField = cmdArgs.lastIndexOf("-f");
-  if (indexOfField == -1) throw new Error("cut: illegal option");
-  return [+cmdArgs[indexOfField + 1]];
+const isValidInput = function(cmdArgs, field, delimiter, filePath) {
+  if (!cmdArgs.includes("-f"))
+    return { error: "usage: cut -f list [-d delim] [file]" };
+  if (delimiter.length != 1) return { error: "cut: bad delimiter" };
+  if (!Number.isInteger(+field))
+    return { error: "cut: [-f] list: illegal list value" };
+  if (+field === 0)
+    return { error: "cut: [-f] list: values may not include zero" };
+  if (!filePath)
+    return { error: `cut: ${filePath}: No such file or directory` };
+  return {};
 };
 
-const getFileNames = function(cmdArgs) {
+const getFile = function(cmdArgs) {
   if (cmdArgs.includes("-d")) {
     return cmdArgs[4];
   }
@@ -21,10 +29,12 @@ const getFileNames = function(cmdArgs) {
 
 const parseInput = function(cmdArgs) {
   const parsedInput = {};
-  parsedInput.fields = getFieldPlaces(cmdArgs);
-  parsedInput.delimiter = getDelimiter(cmdArgs);
-  parsedInput.filePaths = getFileNames(cmdArgs);
-  return parsedInput;
+  const field = cmdArgs[cmdArgs.lastIndexOf("-f") + 1];
+  const delimiter = getDelimiter(cmdArgs);
+  const filePath = getFile(cmdArgs);
+  const { error } = isValidInput(cmdArgs, field, delimiter, filePath);
+  if (error) return { error };
+  return { field: +field, delimiter, filePath };
 };
 
 module.exports = { parseInput };

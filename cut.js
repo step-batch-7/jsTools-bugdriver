@@ -1,18 +1,15 @@
-const { readFile, existsSync } = require("fs");
-const { performCut } = require("./src/cutLib");
+"use strict";
+
+const { createReadStream } = require("fs");
+const { performCut } = require("./src/execCut");
 
 const main = function() {
   const userArgs = process.argv.slice(2);
   const outputWriter = function(contentToWrite) {
-    contentToWrite.cutLog != undefined && console.log(contentToWrite.cutLog);
-    contentToWrite.cutError != undefined &&
-      console.error(contentToWrite.cutError);
+    process.stderr.write(contentToWrite.err);
+    process.stdout.write(contentToWrite.cutFields);
+    process.exit(contentToWrite.exitCode);
   };
-  const fileHandlingFunc = {
-    reader: readFile,
-    isFileExists: existsSync,
-  };
-  process.stdin.setEncoding("utf8");
-  performCut(userArgs, outputWriter, process.stdin, fileHandlingFunc);
+  performCut(userArgs, createReadStream, outputWriter);
 };
 main();
