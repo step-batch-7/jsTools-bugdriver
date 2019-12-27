@@ -1,6 +1,7 @@
 "use strict";
 const { parseInput } = require("./parseInput");
 const { readStreamData, createFileReadStream } = require("./cutLib");
+const EMPTY_STRING = "";
 
 const selectField = function(line, field, delimiter) {
   const fieldList = line.split(delimiter);
@@ -16,11 +17,11 @@ const generateFields = function(fileContent, cutOption) {
 
 const extractFields = function(data, cutOption) {
   if (data.err) {
-    return { err: data.err, cutFields: "", exitCode: 1 };
+    return { err: data.err, cutFields: EMPTY_STRING, exitCode: 1 };
   }
   const extractedField = generateFields(data.lines, cutOption);
   return {
-    err: "",
+    err: EMPTY_STRING,
     cutFields: extractedField.join("\n"),
     exitCode: 0,
   };
@@ -29,7 +30,11 @@ const extractFields = function(data, cutOption) {
 const performCut = function(userArgs, readFileStream, onCompletion) {
   const cutOption = parseInput(userArgs);
   if (cutOption.error) {
-    onCompletion({ err: cutOption.error, cutFields: "", exitCode: 1 });
+    onCompletion({
+      err: cutOption.error,
+      cutFields: EMPTY_STRING,
+      exitCode: 1,
+    });
     return;
   }
   const fileReadStream = createFileReadStream(
