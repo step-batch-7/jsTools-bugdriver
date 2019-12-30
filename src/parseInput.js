@@ -1,40 +1,36 @@
-"use strict";
+'use strict';
 
-const getDelimiter = function(cmdArgs) {
-  let delimiter = "\t";
-  const indexOfDelimiter = cmdArgs.lastIndexOf("-d");
-  if (indexOfDelimiter != -1) delimiter = cmdArgs[indexOfDelimiter + 1];
-  return delimiter;
-};
-
-const isValidInput = function(cmdArgs, field, delimiter, filePath) {
-  if (!cmdArgs.includes("-f"))
-    return { error: "usage: cut -f list [-d delim] [file]" };
-  if (delimiter.length != 1) return { error: "cut: bad delimiter" };
-  if (!Number.isInteger(+field))
-    return { error: "cut: [-f] list: illegal list value" };
-  if (+field === 0)
-    return { error: "cut: [-f] list: values may not include zero" };
-  if (!filePath)
-    return { error: `cut: ${filePath}: No such file or directory` };
-  return {};
-};
-
-const getFile = function(cmdArgs) {
-  if (cmdArgs.includes("-d")) {
-    return cmdArgs[4];
+const checkForErrorIn = function(parsedInput) {
+  const errors = {
+    missingField: 'usage: cut -f list [-d delim] [file]',
+    illegalListValue: 'cut: [-f] list: illegal list value',
+    filePath: `cut: ${parsedInput.filePath}: No such file or directory`,
+  };
+  if (!parsedInput.field) {
+    return errors.missingField;
   }
-  return cmdArgs[2];
+  if (!Number.isInteger(+parsedInput.field)) {
+    return errors.illegalListValue;
+  }
+  if (!parsedInput.filePath) {
+    return errors.filePath;
+  }
+  return null;
 };
 
 const parseInput = function(cmdArgs) {
-  const parsedInput = {};
-  const field = cmdArgs[cmdArgs.lastIndexOf("-f") + 1];
-  const delimiter = getDelimiter(cmdArgs);
-  const filePath = getFile(cmdArgs);
-  const { error } = isValidInput(cmdArgs, field, delimiter, filePath);
-  if (error) return { error };
-  return { field: +field, delimiter, filePath };
+  const parsedInput = { delimiter: '\t' };
+  for (let index = 0; index < cmdArgs.length; index++) {
+    const optionNames = { '-f': 'field', '-d': 'delimiter' };
+    if (cmdArgs[index].startsWith('-')) {
+      const optionName = optionNames[cmdArgs[index]];
+      parsedInput[optionName] = cmdArgs[++index];
+    } else {
+      parsedInput.filePath = cmdArgs[index];
+    }
+  }
+  const error = checkForErrorIn(parsedInput);
+  return { error, parsedInput };
 };
 
 module.exports = { parseInput };

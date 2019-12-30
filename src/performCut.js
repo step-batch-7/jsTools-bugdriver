@@ -1,28 +1,32 @@
-"use strict";
-const { parseInput } = require("./parseInput");
-const { readStreamData, createFileReadStream } = require("./cutLib");
-const EMPTY_STRING = "";
+'use strict';
+const { parseInput } = require('./parseInput');
+const { readStreamData, createFileReadStream } = require('./cutLib');
+const EMPTY_STRING = '';
 
 const selectField = function(line, field, delimiter) {
+  const unitLength = 1;
+  const firstField = 0;
   const fieldList = line.split(delimiter);
-  if (fieldList.length === 1) return fieldList[0];
-  return fieldList[field - 1];
+  if (fieldList.length === unitLength) {
+    return fieldList[firstField];
+  }
+  return fieldList[--field];
 };
 
 const generateFields = function(fileContent, cutOption) {
   const { delimiter, field } = cutOption;
-  const fileLines = fileContent.split("\n");
+  const fileLines = fileContent.split('\n');
   return fileLines.map(line => selectField(line, field, delimiter));
 };
 
-const extractFields = function(data, cutOption) {
-  if (data.err) {
-    return { error: data.err, cutResult: EMPTY_STRING, exitCode: 1 };
+const extractFields = function(chunk, cutOption) {
+  if (chunk.err) {
+    return { error: chunk.err, cutResult: EMPTY_STRING, exitCode: 1 };
   }
-  const extractedField = generateFields(data.lines, cutOption);
+  const extractedField = generateFields(chunk.lines, cutOption);
   return {
     error: EMPTY_STRING,
-    cutResult: extractedField.join("\n"),
+    cutResult: extractedField.join('\n'),
     exitCode: 0,
   };
 };
@@ -39,10 +43,10 @@ const performCut = function(userArgs, readFileStream, onCompletion) {
   }
   const fileReadStream = createFileReadStream(
     readFileStream,
-    cutOption.filePath
+    cutOption.parsedInput.filePath
   );
   readStreamData(fileReadStream, data => {
-    onCompletion(extractFields(data, cutOption));
+    onCompletion(extractFields(data, cutOption.parsedInput));
   });
 };
 
