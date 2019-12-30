@@ -5,8 +5,8 @@ node cut.js -d "," -f 1 fileName                      (gives 1st field of every 
 0.initialize package.json add dev dependency nyc,mocha,chai
 1.create src,test directory
 2.create cut.js having main function
-3.create cutLib.js in src directory
-4.create testCutLib.js in test directory
+3.create cutFileHandler.js in src directory
+4.create testcutFileHandler.js in test directory
 4.1 .. check the existing connections between files 
 -----apptests
 
