@@ -13,40 +13,34 @@ const selectField = function(line, field, delimiter) {
   return fieldList[--field];
 };
 
-const generateFields = function(fileContent, cutOption) {
-  const { delimiter, field } = cutOption;
+const generateFields = function(fileContent, delimiter, field) {
   const fileLines = fileContent.split('\n');
   return fileLines.map(line => selectField(line, field, delimiter));
 };
 
-const extractFields = function(chunk, cutOption) {
-  if (chunk.err) {
+const extractFields = function(fileContent, cutOption) {
+  if (fileContent.err) {
     process.exitCode = 1;
-    return { error: chunk.err, cutResult: EMPTY_STRING };
+    return { error: fileContent.err, cutResult: EMPTY_STRING };
   }
-  const extractedField = generateFields(chunk.lines, cutOption);
-  return {
-    error: EMPTY_STRING,
-    cutResult: extractedField.join('\n'),
-  };
+  const { delimiter, field } = cutOption;
+  const extractedField = generateFields(fileContent.lines, delimiter, field);
+  return { error: EMPTY_STRING, cutResult: extractedField.join('\n') };
 };
 
 const performCut = function(userArgs, readFileStream, onCompletion) {
-  const cutOption = parseInput(userArgs);
-  if (cutOption.error) {
+  const { error, parsedInput } = parseInput(userArgs);
+  if (error) {
     process.exitCode = 1;
-    onCompletion({
-      error: cutOption.error,
-      cutResult: EMPTY_STRING,
-    });
+    onCompletion({ error: error, cutResult: EMPTY_STRING });
     return;
   }
   const fileReadStream = createFileReadStream(
     readFileStream,
-    cutOption.parsedInput.filePath
+    parsedInput.filePath
   );
   readStreamData(fileReadStream, fileContent => {
-    onCompletion(extractFields(fileContent, cutOption.parsedInput));
+    onCompletion(extractFields(fileContent, parsedInput));
   });
 };
 
