@@ -9,7 +9,6 @@ describe('#performCut', () => {
       assert.deepStrictEqual(error, {
         error: 'cut: [-f] list: illegal list value',
         cutResult: '',
-        exitCode: 1,
       });
     };
     const readFileStream = new EventEmitter();
@@ -31,7 +30,6 @@ describe('#performCut', () => {
       assert.deepStrictEqual(cutFields, {
         error: '',
         cutResult: '1',
-        exitCode: 0,
       });
     };
     const eventEmitter = new EventEmitter();
@@ -49,7 +47,6 @@ describe('#performCut', () => {
       assert.deepStrictEqual(cutFields, {
         error: '',
         cutResult: '1-india',
-        exitCode: 0,
       });
     };
     const eventEmitter = new EventEmitter();
@@ -67,7 +64,6 @@ describe('#performCut', () => {
       assert.deepStrictEqual(error, {
         error: 'cut: fileName: Permission denied',
         cutResult: '',
-        exitCode: 1,
       });
     };
     const eventEmitter = new EventEmitter();

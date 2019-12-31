@@ -22,13 +22,12 @@ const generateFields = function(fileContent, cutOption) {
 const extractFields = function(chunk, cutOption) {
   if (chunk.err) {
     process.exitCode = 1;
-    return { error: chunk.err, cutResult: EMPTY_STRING, exitCode: 1 };
+    return { error: chunk.err, cutResult: EMPTY_STRING };
   }
   const extractedField = generateFields(chunk.lines, cutOption);
   return {
     error: EMPTY_STRING,
     cutResult: extractedField.join('\n'),
-    exitCode: 0,
   };
 };
 
@@ -39,7 +38,6 @@ const performCut = function(userArgs, readFileStream, onCompletion) {
     onCompletion({
       error: cutOption.error,
       cutResult: EMPTY_STRING,
-      exitCode: 1,
     });
     return;
   }
@@ -47,8 +45,8 @@ const performCut = function(userArgs, readFileStream, onCompletion) {
     readFileStream,
     cutOption.parsedInput.filePath
   );
-  readStreamData(fileReadStream, data => {
-    onCompletion(extractFields(data, cutOption.parsedInput));
+  readStreamData(fileReadStream, fileContent => {
+    onCompletion(extractFields(fileContent, cutOption.parsedInput));
   });
 };
 

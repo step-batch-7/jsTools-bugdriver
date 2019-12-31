@@ -1,43 +1,43 @@
 const assert = require('chai').assert;
-const EventEmitter = require('events').EventEmitter;
+const sinon = require('sinon');
 const {
   readStreamData,
   createFileReadStream,
 } = require('../src/cutFileHandler');
 
 describe('#readStreamData', () => {
-  it('should give error if readStream give error while reading file', () => {
-    const callback = function(error) {
-      assert.deepStrictEqual(error, {
-        err: 'cut: fileName: Permission denied',
-      });
-    };
-    const readFileStream = new EventEmitter();
-    readFileStream.path = 'fileName';
+  it('should give error if readStream give error', function(done) {
+    const callback = sinon.fake();
+    const readFileStream = { on: sinon.fake(), path: 'fileName' };
     readStreamData(readFileStream, callback);
-    readFileStream.emit('error', { code: 'EACCES' });
+    assert(readFileStream.on.secondCall.calledWith('error'));
+    readFileStream.on.secondCall.lastArg({ code: 'EACCES' });
+    assert(callback.calledOnce);
+    assert(
+      callback.firstCall.calledWith({
+        err: 'cut: fileName: Permission denied',
+      })
+    );
+    done();
   });
 
-  it('should give lines when valid fileName passed ', () => {
-    const callback = function(lines) {
-      assert.deepStrictEqual(lines, {
-        lines: '1,india',
-      });
-    };
-    const readFileStream = new EventEmitter();
-    readFileStream.path = 'fileName';
+  it('should give lines when valid fileName passed ', function(done) {
+    const callback = sinon.fake();
+    const readFileStream = { on: sinon.fake(), path: 'fileName' };
     readStreamData(readFileStream, callback);
-    readFileStream.emit('data', '1,india');
+    assert(readFileStream.on.firstCall.calledWith('data'));
+    readFileStream.on.firstCall.lastArg('abc');
+    assert(callback.calledOnce);
+    assert(callback.firstCall.calledWith({ lines: 'abc' }));
+    done();
   });
 });
 
 describe('#createFileReadStream', () => {
-  it('should give fileReadStream with passed filePath', () => {
-    const eventEmmiter = new EventEmitter();
-    const readFileStream = function(fileName) {
-      assert.deepStrictEqual(fileName, 'fileName');
-      return eventEmmiter;
-    };
+  it('should give fileReadStream with passed filePath', function(done) {
+    const readFileStream = sinon.fake();
     createFileReadStream(readFileStream, 'fileName');
+    assert(readFileStream.firstCall.calledWith('fileName'));
+    done();
   });
 });
