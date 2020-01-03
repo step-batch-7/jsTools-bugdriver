@@ -1,0 +1,3 @@
+npm test && eslint src test > /dev/null
+exit $?
+

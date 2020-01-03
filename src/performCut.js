@@ -10,7 +10,7 @@ const selectField = function(line, field, delimiter) {
   if (fieldList.length === unitLength) {
     return fieldList[firstField];
   }
-  return fieldList[--field];
+  return fieldList[field - 1];
 };
 
 const generateFields = function(fileContent, delimiter, field) {
