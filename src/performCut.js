@@ -1,7 +1,25 @@
 'use strict';
-const { parseInput } = require('./parseInput');
+const { Parser } = require('./parseInput');
 const { readStreamData, createFileReadStream } = require('./cutFileHandler');
 const EMPTY_STRING = '';
+
+const checkForErrorIn = function(parsedInput) {
+  const errors = {
+    missingField: 'usage: cut -f list [-d delim] [file]',
+    illegalListValue: 'cut: [-f] list: illegal list value',
+    filePath: `cut: ${parsedInput.filePath}: No such file or directory`,
+  };
+  if (!parsedInput.field) {
+    return errors.missingField;
+  }
+  if (!Number.isInteger(+parsedInput.field)) {
+    return errors.illegalListValue;
+  }
+  if (!parsedInput.filePath) {
+    return errors.filePath;
+  }
+  return null;
+};
 
 const selectField = function(line, field, delimiter) {
   const unitLength = 1;
@@ -29,7 +47,9 @@ const extractFields = function(fileContent, cutOption) {
 };
 
 const performCut = function(userArgs, readFileStream, onCompletion) {
-  const { error, parsedInput } = parseInput(userArgs);
+  const parser = new Parser({ '-f': 'field', '-d': 'delimiter' });
+  const parsedInput = parser.parse(userArgs);
+  const error = checkForErrorIn(parsedInput);
   if (error) {
     process.exitCode = 1;
     onCompletion({ error: error, cutResult: EMPTY_STRING });
